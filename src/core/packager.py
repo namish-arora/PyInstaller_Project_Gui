@@ -83,7 +83,9 @@ def run_pyinstaller(app_name, entry_file, folder_path, python_exe, mode_file, mo
                     output_frame.pack(before=package_button, anchor=tk.W, padx=20, pady=(10, 0))
                     output_label_ref[0] = tk.Label(output_frame, text="Output:", font=("Arial", 12))
                     output_label_ref[0].pack(side=tk.LEFT, padx=(0, 10))
-                    folder_icon_label = tk.Label(output_frame, text="📁")
+                    folder_image = load_image("folder_icon.png", (20, 20))
+                    folder_icon_label = Label(output_frame, image=folder_image)
+                    folder_icon_label.image = folder_image
                     folder_icon_label.pack(side=tk.LEFT, padx=(0, 10))
                     scrollbar.pack(side=tk.BOTTOM, fill=tk.X)
                     output_text.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
