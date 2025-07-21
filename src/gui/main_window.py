@@ -61,48 +61,35 @@ def launch_gui():
     # Output frame (initially not packed)
     output_frame = tk.Frame(root)
 
-    # Text area to display output
-    output_label = None
+  
     output_text = tk.Text(output_frame, height=3, width=60, wrap="word", bd=2, font=("Aerial", 10), fg="blue")
     scrollbar = tk.Scrollbar(output_frame, orient="horizontal", command=output_text.xview)
     output_text.configure(xscrollcommand=scrollbar.set)
 
+
+
+    output_label = None
+    output_label_ref = [output_label]  # Mutable reference
+
     def wrapper_function():
- 
         def task():
-            global output_label  # Needed to access the global variable
-
             run_pyinstaller(
-
-            app_name_var.get(),
-            entry_file_var.get(),
-            folder_path_var.get(),
-            python_exe_var.get(),
-            mode_var_file.get(),
-            mode_var_console.get(),
-            output_text,
-            root,
-            package_button
-)
-
-            def update_ui():
-                global output_label
-
-            
-                if output_label is None:
-                    output_frame.pack(before=package_button, anchor=tk.W, padx=20, pady=(10, 0))
-                    output_label = tk.Label(output_frame, text="Output:", font=("Arial", 12))
-                    output_label.pack(side=tk.LEFT, padx=(0, 10))
-                    folder_image = load_image("folder_icon.png", (20, 20))
-                    folder_icon_label = Label(output_frame, image=folder_image)
-                    folder_icon_label.image = folder_image
-                    folder_icon_label.pack(side=tk.LEFT, padx=(0, 10))
-                    scrollbar.pack(side=tk.BOTTOM, fill=tk.X)
-                    output_text.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
-
-            root.after(0, update_ui)
+                app_name_var.get(),
+                entry_file_var.get(),
+                folder_path_var.get(),
+                python_exe_var.get(),
+                mode_var_file.get(),
+                mode_var_console.get(),
+                output_text,
+                root,
+                package_button,
+                output_frame,
+                output_label_ref,
+                scrollbar
+            )
 
         threading.Thread(target=task).start()
+
 
         # Button to run PyInstaller
     package_button = tk.Button(root, text="Package  Application", command=wrapper_function, fg="white", bg="green", width=40, font=("Aerial", 12))
