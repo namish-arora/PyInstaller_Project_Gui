@@ -13,7 +13,8 @@ def run_pyinstaller(app_name, entry_file, folder_path, python_exe, mode_file, mo
 
     entry_path = os.path.join(folder_path, entry_file)
     venv_path = os.path.join(folder_path, "venv")
-    requirements_path = os.path.join(folder_path, "requirements.txt")
+    # requirements_path = os.path.join(folder_path, "requirements.txt")
+    # pyproject_path = os.path.join(folder_path,"pyproject.toml")
 
     dist_path = os.path.join(venv_path, "dist")
     build_path = os.path.join(venv_path, "build")
@@ -34,7 +35,7 @@ def run_pyinstaller(app_name, entry_file, folder_path, python_exe, mode_file, mo
     def task():
         try:
            
-            pyinstaller_executable = create_virtual_env(venv_path, requirements_path)
+            pyinstaller_executable = create_virtual_env(venv_path,folder_path)
 
             command = [
                 pyinstaller_executable,
@@ -44,7 +45,9 @@ def run_pyinstaller(app_name, entry_file, folder_path, python_exe, mode_file, mo
                 "--workpath", build_path,
                 "--specpath", spec_path,
                 "--hidden-import=ansys",
-                "--hidden-import=PySide6"
+                "--hidden-import=PySide6",
+                "--hidden-import=requests",
+                
             ]
 
             command.append("--onefile" if mode_file == "onefile" else "--onedir")
@@ -78,7 +81,7 @@ def run_pyinstaller(app_name, entry_file, folder_path, python_exe, mode_file, mo
                 progress_bar.stop()
                 progress_bar.pack_forget()
                 output_text.delete("1.0", tk.END)
-                output_text.insert(tk.END, f"Packaging failed:\n{e}")
+                output_text.insert(tk.END, f"Packaging failed:\n")
                 if output_label_ref[0] is None:
                     output_frame.pack(before=package_button, anchor=tk.W, padx=20, pady=(10, 0))
                     output_label_ref[0] = tk.Label(output_frame, text="Output:", font=("Arial", 12))
