@@ -28,7 +28,7 @@ def create_folder_selector_with_display(root):
     # Button to browse folder
     browse_button = tk.Button(folder_frame, text="Browse", command=browse_folder, fg="black", bg="aqua", width=20, font=("Arial", 10))
     browse_button.pack(side=tk.LEFT, padx=10)
-    CustomToolTip(browse_button, "Click to select the folder containing your Python project.\nThe main.py should be present in the src fsubfolder.")
+    CustomToolTip(browse_button, "Click to select the folder containing your Python project.\nThe main.py should be present in the src subfolder.")
 
         #make a frame to show to the TextArea and the copy icon beside it
     text_frame = tk.Frame(root)
