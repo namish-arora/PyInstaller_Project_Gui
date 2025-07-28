@@ -19,9 +19,24 @@ def create_folder_preview_with_display(root, folder_path_var):
     scrollbar.pack(side=tk.RIGHT,fill = tk.Y)
     text_widget.pack(side=tk.LEFT)
 
+    
+
+    def get_project_root_path(folder_path):
+
+    # Traverse up until we find a folder that contains typical project filesimport
+        while folder_path:
+            parent = os.path.dirname(folder_path)
+            if any(f in os.listdir(folder_path) for f in ['requirements.txt', 'setup.py', 'pyproject.toml', '.git', 'README.md']):
+                return folder_path
+            if parent == folder_path:  # Reached root
+                break
+            folder_path = parent
+        return folder_path  # Fallback to current folder
+
+
     # Function to update preview
     def update_folder_preview(*args):
-        folder = folder_path_var.get()
+        folder = get_project_root_path(folder_path_var.get())
         text_widget.delete("1.0", tk.END)
         if folder and os.path.isdir(folder):
             for root_dir, dirs, files in os.walk(folder):

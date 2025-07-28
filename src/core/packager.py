@@ -1,7 +1,9 @@
+from click import command
 from src.tools.core_libs import *
 from src.tools.ui_libs import *
 from src.utils.image_loader import load_image
 from src.tools.create_virtual_enviroment import create_virtual_env
+
 
 
 
@@ -36,6 +38,7 @@ def run_pyinstaller(app_name, entry_file, folder_path, python_exe, mode_file, mo
         try:
            
             pyinstaller_executable = create_virtual_env(venv_path,folder_path)
+          
 
             command = [
                 pyinstaller_executable,
@@ -47,11 +50,16 @@ def run_pyinstaller(app_name, entry_file, folder_path, python_exe, mode_file, mo
                 "--hidden-import=ansys",
                 "--hidden-import=PySide6",
                 "--hidden-import=requests",
+               
                 
             ]
 
             command.append("--onefile" if mode_file == "onefile" else "--onedir")
             command.append("--console" if mode_console == "console" else "--windowed")
+
+            
+    
+
 
             subprocess.run(command, check=True)
 
