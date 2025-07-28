@@ -1,5 +1,6 @@
-import os
-from PIL import Image, ImageTk
+from src.tools.core_libs import *
+from src.tools.ui_libs import *
+
 
 def load_image(filename, size):
     base_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', 'assets'))

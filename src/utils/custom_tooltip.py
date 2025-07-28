@@ -1,4 +1,5 @@
-import tkinter as tk
+from src.tools.core_libs import *
+from src.tools.ui_libs import *
 
 
 class CustomToolTip:
