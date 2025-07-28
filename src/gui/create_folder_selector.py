@@ -35,6 +35,7 @@ def create_folder_selector_with_display(root):
     text_frame.pack(anchor=tk.W, padx=20, pady=5)
     #give me a text area to display the folder path
     folder_path_display = tk.Text(text_frame, height=2, width=70, wrap="word", bd=2, font=("Aerial", 10), fg="blue")
+    
 
 
     folder_path_display.pack(side=tk.LEFT, fill=tk.BOTH)

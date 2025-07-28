@@ -48,6 +48,7 @@ def create_virtual_env(venv_path,folder_path):
         subprocess.run([pip_executable, "install", pyproject_path], check=True)
 
 
+
     subprocess.run([pip_executable, "install", "pyinstaller"], check=True) # to install pyinstaller
 
     return os.path.join(venv_path, "Scripts", "pyinstaller.exe") if os.name == "nt" else os.path.join(venv_path, "bin", "pyinstaller")

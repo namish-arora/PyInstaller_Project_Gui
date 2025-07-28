@@ -38,6 +38,8 @@ def run_pyinstaller(app_name, entry_file, folder_path, python_exe, mode_file, mo
         try:
            
             pyinstaller_executable = create_virtual_env(venv_path,folder_path)
+
+
           
 
             command = [
@@ -48,11 +50,23 @@ def run_pyinstaller(app_name, entry_file, folder_path, python_exe, mode_file, mo
                 "--workpath", build_path,
                 "--specpath", spec_path,
                 "--hidden-import=ansys",
-                "--hidden-import=PySide6",
                 "--hidden-import=requests",
-               
-                
+                "--hidden-import=PySide6",
             ]
+          
+
+
+            
+            command += ["--collect-submodules", "PySide6"]
+            command += ["--collect-data", "PySide6"]
+
+
+            
+            os.environ["QT_PLUGIN_PATH"] = os.path.join(venv_path, "Lib", "site-packages", "PySide6", "plugins")
+
+
+            
+
 
             command.append("--onefile" if mode_file == "onefile" else "--onedir")
             command.append("--console" if mode_console == "console" else "--windowed")
