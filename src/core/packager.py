@@ -1,8 +1,15 @@
-from click import command
-from src.tools.core_libs import *
-from src.tools.ui_libs import *
+import os
+import tkinter as tk
+import subprocess
+import threading
+from tkinter import messagebox, ttk, Label
+
 from src.utils.image_loader import load_image
 from src.tools.create_virtual_enviroment import create_virtual_env
+
+
+
+
 
 
 
@@ -15,8 +22,7 @@ def run_pyinstaller(app_name, entry_file, folder_path, python_exe, mode_file, mo
 
     entry_path = os.path.join(folder_path, entry_file)
     venv_path = os.path.join(folder_path, "venv")
-    # requirements_path = os.path.join(folder_path, "requirements.txt")
-    # pyproject_path = os.path.join(folder_path,"pyproject.toml")
+
 
     dist_path = os.path.join(venv_path, "dist")
     build_path = os.path.join(venv_path, "build")
@@ -37,7 +43,7 @@ def run_pyinstaller(app_name, entry_file, folder_path, python_exe, mode_file, mo
     def task():
         try:
            
-            pyinstaller_executable = create_virtual_env(venv_path,folder_path)
+            pyinstaller_executable = create_virtual_env(venv_path,folder_path) #created the venv
 
 
           
@@ -62,7 +68,7 @@ def run_pyinstaller(app_name, entry_file, folder_path, python_exe, mode_file, mo
 
 
             
-            os.environ["QT_PLUGIN_PATH"] = os.path.join(venv_path, "Lib", "site-packages", "PySide6", "plugins")
+            os.environ["QT_PLUGIN_PATH"] = os.path.join(venv_path, "Lib", "site-packages", "PySide6", "plugins") #manually setting the qt plugin path but still failing
 
 
             

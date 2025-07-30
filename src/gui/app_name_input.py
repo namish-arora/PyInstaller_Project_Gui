@@ -1,4 +1,6 @@
-from src.tools.ui_libs import *
+import tkinter as tk
+from tkinter import *
+
 from src.utils.custom_tooltip import CustomToolTip
 
 def create_app_name_input(root):

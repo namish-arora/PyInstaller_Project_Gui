@@ -1,5 +1,4 @@
-from src.tools.core_libs import *
-from src.tools.ui_libs import *
+import tkinter as tk
 
 from src.utils.image_loader import load_image
 

@@ -1,10 +1,13 @@
-from src.tools.ui_libs import *
-from src.tools.core_libs import *
+import os
+import tkinter as tk
+from tkinter import Label
+
+
 
 
 def create_command_preview_with_display(root,app_name_var, folder_path_var, entry_file_var, python_exe_var, mode_var_file, mode_var_console):
     # Create a frame for command preview
-    Label(root,text="Current Command:", font=("Arial", 12)).pack(anchor=W, padx=20, pady=(10, 0))
+    Label(root,text="Current Command:", font=("Arial", 12)).pack(anchor=tk.W, padx=20, pady=(10, 0))
     #first create a frame to hold text area and scrollbar
     command_frame = tk.Frame(root)
     command_frame.pack(anchor=tk.W, padx=40, pady=5)

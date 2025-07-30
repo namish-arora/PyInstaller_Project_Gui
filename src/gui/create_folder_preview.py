@@ -1,6 +1,5 @@
-from src.tools.core_libs import *
-from src.tools.ui_libs import *
-
+import os
+import tkinter as tk
 
 
 def create_folder_preview_with_display(root, folder_path_var):

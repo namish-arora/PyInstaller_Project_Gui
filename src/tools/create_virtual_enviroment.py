@@ -1,5 +1,7 @@
-from src.tools.core_libs import *
-from src.tools.ui_libs import *
+import os
+import subprocess
+import sys
+
 
 
 def create_virtual_env(venv_path,folder_path):
@@ -49,7 +51,7 @@ def create_virtual_env(venv_path,folder_path):
 
 
 
-    subprocess.run([pip_executable, "install", "pyinstaller"], check=True) # to install pyinstaller
+    subprocess.run([pip_executable, "install", "pyinstaller"], check=True) # to install pyinstaller in venv
 
     return os.path.join(venv_path, "Scripts", "pyinstaller.exe") if os.name == "nt" else os.path.join(venv_path, "bin", "pyinstaller")
    

@@ -1,6 +1,10 @@
-from src.tools.core_libs import *
-from src.tools.ui_libs import *
+import tkinter as tk
+from tkinter import Label
+
+
 from src.utils.custom_radio import CustomRadioGroup
+
+
 
 def create_mode_selectors_with_display(root):
     mode_var_file = tk.StringVar(value="onefile") # by default 

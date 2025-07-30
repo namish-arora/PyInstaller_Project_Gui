@@ -1,7 +1,9 @@
-from src.tools.core_libs import *
-from src.tools.ui_libs import *
+import tkinter as tk
+import os
 
 from src.utils.custom_tooltip import CustomToolTip
+
+
 
 
 def create_entry_point_selector_with_display(root, folder_path_var):
@@ -24,7 +26,7 @@ def create_entry_point_selector_with_display(root, folder_path_var):
 
     #frame to hold the label and dropdown menu
     entry_frame = tk.Frame(root)
-    entry_frame.pack(anchor=W,padx=20,pady=(10,0))
+    entry_frame.pack(anchor=tk.W,padx=20,pady=(10,0))
     # Label for entry file selection
     entry_label = tk.Label(entry_frame,text="Select Entry Point(.py file)",font=("Aerial",12))
     entry_label.pack(side=tk.LEFT)

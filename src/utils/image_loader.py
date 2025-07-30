@@ -1,5 +1,7 @@
-from src.tools.core_libs import *
-from src.tools.ui_libs import *
+import os
+from PIL import Image, ImageTk
+
+
 
 
 def load_image(filename, size):
