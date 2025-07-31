@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import *
+
 
 from src.utils.custom_tooltip import CustomToolTip
 
