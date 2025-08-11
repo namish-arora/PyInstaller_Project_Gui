@@ -1,6 +1,8 @@
 import tkinter as tk
 
-from src.utils.image_loader import load_image
+# from src.utils.image_loader import load_image
+
+from ..utils.image_loader import load_image
 
 def load_header_with_label(root):
     # Frame for logo and welcome text

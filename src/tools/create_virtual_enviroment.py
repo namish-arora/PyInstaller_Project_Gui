@@ -10,7 +10,12 @@ def create_virtual_env(venv_path,folder_path):
     subprocess.run([sys.executable, "-m", "venv", venv_path], check=True)
 
     pip_executable = os.path.join(venv_path, "Scripts", "pip.exe") if os.name == "nt" else os.path.join(venv_path, "bin", "pip")
-   
+    python_executable = os.path.join(venv_path, "Scripts", "python.exe") if os.name == "nt" else os.path.join(venv_path, "bin", "python")
+
+    # Upgrade pip in the virtual environment using python executable
+    subprocess.run([python_executable, "-m", "pip", "install", "--upgrade", "pip"], check=True)
+
+    
     def find_requirements_txt(start_path): #to find requirements.txt path in parent folder
         current_path = start_path
         while True:
@@ -44,14 +49,14 @@ def create_virtual_env(venv_path,folder_path):
     pyproject_path = find_parent_folder_path(folder_path)
 
     if requirements_path:
-        subprocess.run([pip_executable, "install", "-r", requirements_path], check=True)
+        subprocess.run([python_executable, "-m", "pip", "install", "-r", requirements_path], check=True)
 
     elif pyproject_path:
-        subprocess.run([pip_executable, "install", pyproject_path], check=True)
+        subprocess.run([python_executable, "-m", "pip", "install", pyproject_path], check=True)
 
 
 
-    subprocess.run([pip_executable, "install", "pyinstaller"], check=True) # to install pyinstaller in venv
+    subprocess.run([python_executable, "-m", "pip", "install", "pyinstaller"], check=True) # to install pyinstaller in venv
 
     return os.path.join(venv_path, "Scripts", "pyinstaller.exe") if os.name == "nt" else os.path.join(venv_path, "bin", "pyinstaller")
    

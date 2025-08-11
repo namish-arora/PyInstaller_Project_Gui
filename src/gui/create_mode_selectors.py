@@ -2,7 +2,9 @@ import tkinter as tk
 from tkinter import Label
 
 
-from src.utils.custom_radio import CustomRadioGroup
+# from src.utils.custom_radio import CustomRadioGroup
+
+from ..utils.custom_radio import CustomRadioGroup
 
 
 

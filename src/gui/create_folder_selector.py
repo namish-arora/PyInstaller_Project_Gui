@@ -2,8 +2,11 @@ import tkinter as tk
 from tkinter import filedialog, messagebox
 
 
-from src.utils.custom_tooltip import CustomToolTip
-from src.utils.image_loader import load_image
+# from src.utils.custom_tooltip import CustomToolTip
+# from src.utils.image_loader import load_image
+
+from ..utils.custom_tooltip import CustomToolTip
+from ..utils.image_loader import load_image
 
 
 

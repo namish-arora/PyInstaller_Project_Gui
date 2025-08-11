@@ -1,7 +1,9 @@
 import tkinter as tk
 import os
 
-from src.utils.custom_tooltip import CustomToolTip
+# from src.utils.custom_tooltip import CustomToolTip
+
+from ..utils.custom_tooltip import CustomToolTip
 
 
 

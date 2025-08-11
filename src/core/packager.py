@@ -5,8 +5,13 @@ import threading
 from tkinter import messagebox, ttk, Label
 
 
-from src.utils.image_loader import load_image
-from src.tools.create_virtual_enviroment import create_virtual_env
+# from src.utils.image_loader import load_image
+# from src.tools.create_virtual_enviroment import create_virtual_env
+
+
+from ..utils.image_loader import load_image
+from ..tools.create_virtual_enviroment import create_virtual_env
+
 
 
 
@@ -22,6 +27,20 @@ def get_parent_folder_path(start_path):
         if os.path.exists(os.path.join(parent_path, "pyproject.toml")) or os.path.exists(os.path.join(parent_path,"requirements.txt")):
             return parent_path
         current_path = parent_path
+
+
+def find_frozen_path(start_path):
+    current_path = start_path
+    while True:
+        frozen_path = os.path.join(current_path,"frozen.spec")
+        if os.path.exists(frozen_path):
+            return frozen_path
+        parent_path = os.path.dirname(current_path) # move one step up in tree
+        if parent_path == current_path:
+            return None
+        
+        current_path = parent_path
+
 
 
 
@@ -61,6 +80,11 @@ def run_pyinstaller(app_name, entry_file, folder_path, python_exe, mode_file, mo
            
             pyinstaller_executable = create_virtual_env(venv_path,folder_path) #created the venv
 
+            frozen_spec_path = find_frozen_path(folder_path)
+            user_project_path = os.path.dirname(frozen_spec_path) if frozen_spec_path else None
+
+
+
             # print("python exectable path:", pyinstaller_executable) #showing for venv python scripts path
 
             # command = [
@@ -90,15 +114,7 @@ def run_pyinstaller(app_name, entry_file, folder_path, python_exe, mode_file, mo
             data_files = [(os.path.join(site_packages_path, pkg), pkg) for pkg in included_packages]
 
                     
-            # # Use known plugin path inside the venv
-            # qt_plugins_base = os.path.join(site_packages_path, 'PySide6', 'plugins')
-            # print(f"Checking for Qt plugins at: {qt_plugins_base}")
-            # if os.path.exists(qt_plugins_base):
-            #     print("Qt plugins found in venv, adding to data files")
-            #     data_files.append((qt_plugins_base, 'PySide6/plugins'))
-            # else:
-            #     print("No Qt plugins found in venv")
-
+       
                
   
             # Build --add-data arguments
@@ -107,25 +123,49 @@ def run_pyinstaller(app_name, entry_file, folder_path, python_exe, mode_file, mo
             for src, dest in data_files:
                 add_data_args.extend(['--add-data', f'{src}{sep}{dest}'])
 
+            #check for frozen.spec file and if it is then directly run the command
+
+            print("the frozen spec path is:", frozen_spec_path)
+
+            if frozen_spec_path:
+                # Use the pyinstaller from venv and the full path to the spec file
+                                
+                # Path to the Ansys Python Manager repo
+                #ansys_manager_path = r"C:\Users\narora\OneDrive - ANSYS, Inc\Desktop\ansys_python_manager_demo\python-installer-qt-gui"
+                
+
+                # Change working directory to where frozen.spec is
+                os.chdir(user_project_path)
+
+                # Run PyInstaller using the spec file
+                subprocess.run(["pyinstaller", "frozen.spec"], check=True) 
+                #subprocess.run([pyinstaller_executable,"frozen.spec"], check=True) 
+
+
+
             
-           
+            else:
+                
             # Build the PyInstaller command
-            command = [
-                pyinstaller_executable,
-                "--name", app_name,
-                entry_path,
-                "--distpath", dist_path,
-                "--workpath", build_path,
-                "--specpath", spec_path, #path to parent folder not venv
-                "--path", site_packages_path,
-                "--onefile" if mode_file == "onefile" else "--onedir",
-                "--console" if mode_console == "console" else "--windowed",
-                *add_data_args
-            ]
+                command = [
+                    pyinstaller_executable,
+                    "--name", app_name,
+                    entry_path,
+                    "--distpath", dist_path,
+                    "--workpath", build_path,
+                    "--specpath", spec_path, #path to parent folder not venv
+                    "--path", site_packages_path,
+                    "--onefile" if mode_file == "onefile" else "--onedir",
+                    "--console" if mode_console == "console" else "--windowed",
+                ] + add_data_args
 
-            print(f"Running PyInstaller command: {' '.join(command)}")
+                
+                
+            
 
-            subprocess.run(command, check=True) #run the command
+            
+
+                subprocess.run(command, check=True) #run the command
 
 
 
