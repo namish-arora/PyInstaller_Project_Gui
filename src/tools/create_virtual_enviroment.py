@@ -15,7 +15,11 @@ def create_virtual_env(venv_path,folder_path):
     # Upgrade pip in the virtual environment using python executable
     subprocess.run([python_executable, "-m", "pip", "install", "--upgrade", "pip"], check=True)
 
+    #now we can istall uv from pip
+    subprocess.run([pip_executable, "install", "uv"], check=True) #install uv in venv
+
     
+   
     def find_requirements_txt(start_path): #to find requirements.txt path in parent folder
         current_path = start_path
         while True:
@@ -50,14 +54,39 @@ def create_virtual_env(venv_path,folder_path):
 
     if requirements_path:
         subprocess.run([python_executable, "-m", "pip", "install", "-r", requirements_path], check=True)
+        #run with uv
+
+    #     subprocess.run([
+    #     "uv", "pip", "install", "-r", requirements_path,
+    #     "--python", str(python_executable)
+    # ], check=True)
+
+
 
     elif pyproject_path:
-        subprocess.run([python_executable, "-m", "pip", "install", pyproject_path], check=True)
+
+        # # subprocess.run([python_executable, "-m", "pip", "install", pyproject_path], check=True)
+        # subprocess.run([python_executable, "-m", "pip", "install", f"{pyproject_path}[freeze]"], check=True)
+
+        #uv se error dekha raha..permission denied error
+
+        subprocess.run(["uv", "pip", "install", f"{pyproject_path}[freeze]", "--python", str(python_executable)], check=True)
+
 
 
 
     subprocess.run([python_executable, "-m", "pip", "install", "pyinstaller"], check=True) # to install pyinstaller in venv
 
+    # subprocess.run([
+    #     "uv", "pip", "install", "pyinstaller",
+    #     "--python"
+    # ], check=True)
+
+
     return os.path.join(venv_path, "Scripts", "pyinstaller.exe") if os.name == "nt" else os.path.join(venv_path, "bin", "pyinstaller")
+
+
+
+
    
    

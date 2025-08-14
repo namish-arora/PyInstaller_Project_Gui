@@ -31,15 +31,20 @@ from ..core.packager import run_pyinstaller
 output_label = None
 
 
+
+
 def launch_gui():
     root = tk.Tk()
     root.title("PyInstaller GUI")
-    root.geometry("600x950")
+    root.geometry("600x980")
 
     # Load and set window icon
     icon_image = load_image("ansys_logo_2.jpg", (32, 32))
     root.iconphoto(False, icon_image)
     root.icon_image = icon_image  # Prevent garbage collection
+
+    root.resizable(False, False)  # Disable resizing
+
 
   
     load_header_with_label(root)  # Load header with logo and welcome text
@@ -70,7 +75,7 @@ def launch_gui():
 
 
     create_command_preview_with_display(root, app_name_var, entry_file_var, folder_path_var, python_exe_var, mode_var_file, mode_var_console)  # Create command preview with display
-    
+
     # Output frame (initially not packed)
     output_frame = tk.Frame(root)
 
@@ -83,6 +88,8 @@ def launch_gui():
 
     output_label = None
     output_label_ref = [output_label]  # Mutable reference
+
+
 
     def wrapper_function():
         def task():
@@ -98,7 +105,7 @@ def launch_gui():
                 package_button,
                 output_frame,
                 output_label_ref,
-                scrollbar
+                scrollbar,final_venv_path=""
             )
 
         threading.Thread(target=task).start()

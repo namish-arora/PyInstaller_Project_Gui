@@ -41,8 +41,7 @@ def create_command_preview_with_display(root,app_name_var, folder_path_var, entr
 
         entry_path = os.path.join(folder_path, entry_file)
         command = [
-            python_exe,
-            "-m", "PyInstaller",
+            "pyinstaller",
             "--name", app_name,
             entry_path
         ]
@@ -73,3 +72,5 @@ def create_command_preview_with_display(root,app_name_var, folder_path_var, entr
     mode_var_console.trace_add("write", update_command_preview)
 
     update_command_preview
+
+

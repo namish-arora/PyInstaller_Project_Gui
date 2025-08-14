@@ -1,4 +1,5 @@
 import tkinter as tk
+from tkinter import Toplevel, Label
 
 
 
@@ -25,4 +26,37 @@ class CustomToolTip:
         if self.tip_window:
             self.tip_window.destroy()
             self.tip_window = None
+
+
+
+
+
+class HoverTooltip:
+    def __init__(self, listbox):
+        self.listbox = listbox
+        self.tooltip = None
+        self.listbox.bind("<Motion>", self.on_hover)
+        self.listbox.bind("<Leave>", self.hide_tooltip)
+
+    def on_hover(self, event):
+        index = self.listbox.nearest(event.y)
+        if index >= 0:
+            text = self.listbox.get(index)
+            self.show_tooltip(text, event)
+
+    def show_tooltip(self, text, event):
+        self.hide_tooltip()
+        self.tooltip = Toplevel(self.listbox)
+        self.tooltip.wm_overrideredirect(True)
+        x = event.x_root + 10
+        y = event.y_root + 10
+        self.tooltip.geometry(f"+{x}+{y}")
+        label = Label(self.tooltip, text=text, background="#ffffe0", relief="solid", borderwidth=1)
+        label.pack()
+
+    def hide_tooltip(self, event=None):
+        if self.tooltip:
+            self.tooltip.destroy()
+            self.tooltip = None
+
 

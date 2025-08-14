@@ -1,85 +1,98 @@
 import tkinter as tk
-from tkinter import filedialog, messagebox
-
-
-# from src.utils.custom_tooltip import CustomToolTip
-# from src.utils.image_loader import load_image
+from tkinter import ttk
+import os
+import glob
 
 from ..utils.custom_tooltip import CustomToolTip
 from ..utils.image_loader import load_image
 
+def find_python_executables():
+    """Search common directories for python executables."""
+    python_paths = set()
+
+    # Common Windows install locations
+    possible_dirs = [
+        os.environ.get("ProgramFiles", ""),
+        os.environ.get("ProgramFiles(x86)", ""),
+        os.environ.get("LocalAppData", ""),
+        os.path.expanduser("~\\AppData\\Local\\Programs"),
+        "C:\\Python*",
+    ]
+
+    for base_dir in possible_dirs:
+        if base_dir and os.path.exists(base_dir):
+            matches = glob.glob(os.path.join(base_dir, "**", "python.exe"), recursive=True)
+            for match in matches:
+                python_paths.add(os.path.normpath(match))
+
+    # Also check PATH environment variable
+    for path_dir in os.environ.get("PATH", "").split(os.pathsep):
+        exe_path = os.path.join(path_dir.strip('"'), "python.exe")
+        if os.path.exists(exe_path):
+            python_paths.add(os.path.normpath(exe_path))
+
+    return sorted(python_paths)
+
 def create_python_exe_selector_with_display(root):
-    # Function to browse for Python executable
-    def browse_python_exe():
-        exe_path = filedialog.askopenfilename(title="Select Python Executable", filetypes=[("Python Executable", "python.exe")])
-        if exe_path:
-            python_exe_var.set(exe_path)
-
-
     python_frame = tk.Frame(root)
-    python_frame.pack(anchor=tk.W,padx=20,pady=20)
+    python_frame.pack(anchor=tk.W, padx=20, pady=10)
 
     python_exe_var = tk.StringVar()
-    # python_exe_var.set("Select Python Executable")
 
-    python_exe_label = tk.Label(python_frame,text="Select Python Exe:",font=("Aerial",12))
+    # Top row: Label and icon side-by-side
+    top_row = tk.Frame(python_frame)
+    top_row.pack(anchor=tk.W)
+
+    python_exe_label = tk.Label(top_row, text="Select Python Exe:", font=("Arial", 12))
     python_exe_label.pack(side=tk.LEFT)
 
-    #python file icon add
     python_icon_image = load_image("python_file.png", (25, 25))
-    python_icon_label = tk.Label(python_frame, image=python_icon_image)
-    python_icon_label.image = python_icon_image  # Keep a reference to avoid garbage collection
-    python_icon_label.pack(side=tk.LEFT, padx=(0, 10))  # Add some space between icon and label
+    python_icon_label = tk.Label(top_row, image=python_icon_image)
+    python_icon_label.image = python_icon_image
+    python_icon_label.pack(side=tk.LEFT, padx=(5, 10))
 
-    # Browse button
+    # Bottom row: Combobox below the label and icon
+    python_exe_dropdown = ttk.Combobox(python_frame, textvariable=python_exe_var, width=80, font=("Arial", 10))
+    python_exe_dropdown['values'] = find_python_executables()
+    python_exe_dropdown.pack(anchor=tk.W, pady=(5, 0))
 
-    python_exe_button = tk.Button(python_frame,text="Browse",command=browse_python_exe,fg="black",bg="aqua",width = 20,font=("Arial",10))
-    python_exe_button.pack(side=tk.LEFT,padx=10)
+    CustomToolTip(python_exe_dropdown, "Select the Python executable.\nThis is required to run PyInstaller.")
 
-    CustomToolTip(python_exe_button, "Click to select the Python executable.\nThis is required to run PyInstaller.")
+    # Display selected path
+    # python_exe_text_frame = tk.Frame(root)
+    # python_exe_text_frame.pack(anchor=tk.W, padx=20, pady=5)
 
-    #add text area to display pytohnexe path and copy icon beside it to copy yo clipboard
-    python_exe_text_frame = tk.Frame(root)
-    python_exe_text_frame.pack(anchor=tk.W, padx=20, pady=5)
-    python_exe_display = tk.Text(python_exe_text_frame, height=2, width=70, wrap="word", bd=2, font=("Arial", 10), fg="blue")
+    # python_exe_display = tk.Text(python_exe_text_frame, height=2, width=70, wrap="word", bd=2, font=("Arial", 10), fg="blue")
+    # python_exe_display.pack(side=tk.LEFT, fill=tk.BOTH)
 
-    python_exe_display.pack(side=tk.LEFT, fill=tk.BOTH)
+    # def update_python_exe_display(*args):
+    #     python_exe = python_exe_var.get()
+    #     python_exe_display.delete("1.0", tk.END)
+    #     if python_exe:
+    #         python_exe_display.insert(tk.END, python_exe)
+    #     else:
+    #         python_exe_display.insert(tk.END, "No Python executable selected")
 
+    # python_exe_var.trace_add("write", update_python_exe_display)
+    # update_python_exe_display()
 
-    # Function to update the Python executable display
-    def update_python_exe_display(*args):
-        python_exe = python_exe_var.get()
-        if python_exe:
-            python_exe_display.delete("1.0", tk.END)  # Clear previous text
-            python_exe_display.insert(tk.END, python_exe)  # Insert new path
-        else:
-            python_exe_display.delete("1.0", tk.END)
-            python_exe_display.insert(tk.END, "No Python executable selected")  # Default message
+    # # Copy icon and functionality
+    # copy_icon_image = load_image("copy_icon.png", (20, 20))
+    # copy_icon_label = tk.Label(python_exe_text_frame, image=copy_icon_image)
+    # copy_icon_label.image = copy_icon_image
+    # copy_icon_label.pack(side=tk.LEFT, padx=(10, 0))
 
-    # Trigger update when Python executable changes
-    python_exe_var.trace_add("write", update_python_exe_display)
+    # def copy_python_exe():
+    #     python_exe = python_exe_var.get()
+    #     if python_exe:
+    #         root.clipboard_clear()
+    #         root.clipboard_append(python_exe)
+    #         messagebox.showinfo("Copied", "Python executable path copied to clipboard!")
+    #     else:
+    #         messagebox.showwarning("Warning", "No Python executable path to copy.")
 
-    # Update the display initially
-    update_python_exe_display()
+    # copy_icon_label.bind("<Button-1>", lambda e: copy_python_exe())
+    # CustomToolTip(copy_icon_label, "Click to copy")
 
-    #add a copy icon to copy the python exe path to clipboard
-    copy_icon_image = load_image("copy_icon.png", (20, 20))
-    copy_icon_label = tk.Label(python_exe_text_frame, image=copy_icon_image)
-    copy_icon_label.image = copy_icon_image  # Keep a reference to avoid garbage collection
-    copy_icon_label.pack(side=tk.LEFT, padx=(10, 0))  # Add some space between text area and icon
+    return python_exe_var
 
-    # Function to copy Python executable path to clipboard
-    def copy_python_exe():
-        python_exe = python_exe_var.get()
-        if python_exe:
-            root.clipboard_clear()  # Clear the clipboard
-            root.clipboard_append(python_exe)  # Append the Python executable path to the clipboard
-            messagebox.showinfo("Copied", "Python executable path copied to clipboard!")
-        else:
-            messagebox.showwarning("Warning", "No Python executable path to copy.")
-
-    # Bind the copy icon to the copy function
-    copy_icon_label.bind("<Button-1>", lambda e: copy_python_exe())  # Left-click to copy Python executable path
-    CustomToolTip(copy_icon_label,"click to copy")
-
-    return python_exe_var  # Return the variable for further use
