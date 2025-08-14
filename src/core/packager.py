@@ -11,7 +11,7 @@ import shutil
 from ..utils.image_loader import load_image
 from ..tools.create_virtual_enviroment import create_virtual_env
 
-
+#open folder if file found
 def open_folder(folder_path):
     """Open the specified folder in the file explorer."""
     if sys.platform == "win32":
